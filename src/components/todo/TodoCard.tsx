@@ -1,23 +1,59 @@
 import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
-import { removeTodo } from "@/redux/features/todoSlice";
+import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
 
 type TTodoCardProps = {
   id: string;
   title: string;
   desc: string;
+  isComplete: boolean;
+  priority: string;
 };
 
-const TodoCard = ({ title, desc, id }: TTodoCardProps) => {
+const TodoCard = ({
+  title,
+  desc,
+  id,
+  isComplete,
+  priority,
+}: TTodoCardProps) => {
   const dispatch = useAppDispatch();
+  const toggleState = () => {
+    dispatch(toggleComplete(id));
+  };
   return (
     <div>
       <div className="bg-gray-400 rounded-md p-2 my-2 flex justify-between items-center ">
-        <input type="checkbox" name="" id="" />
+        <input
+          className="me-3"
+          onChange={toggleState}
+          type="checkbox"
+          name="complete"
+          id="complete"
+        />
         <p className="font-semibold">{title}</p>
         {/* <p>time</p> */}
-        <p>{desc}</p>
-        <div className="flex gap-4">
+
+        <div className="flex items-center gap-2 justify-center flex-1">
+          <div
+            className={`size-3 rounded-full ${
+              priority === "high"
+                ? "bg-red-500"
+                : priority === "medium"
+                ? "bg-green-500"
+                : "bg-yellow-500"
+            }`}
+          ></div>
+          <p className="">{priority}</p>
+        </div>
+        <p className="flex-[2]">{desc}</p>
+        {isComplete ? (
+          <p className="bg-green-500 px-3 py-2  text-white rounded">Done</p>
+        ) : (
+          <p className="bg-red-500 px-3 py-2  text-white rounded">Pending</p>
+        )}
+
+        <div className="flex gap-4 ms-3">
           <Button className="bg-gray-400 text-black hover:bg-black hover:text-white border  border-black font-semibold">
             <svg
               xmlns="http://www.w3.org/2000/svg"

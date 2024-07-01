@@ -12,23 +12,43 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useAppDispatch } from "@/redux/hook";
-import { addTodo } from "@/redux/features/todoSlice";
+import { useAddTodoMutation } from "@/redux/api/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+// import { useAppDispatch } from "@/redux/hook";
+// import { addTodo } from "@/redux/features/todoSlice";
 
 const AddTodoModal = () => {
   const [task, setTask] = useState("");
   const [desc, setDesc] = useState("");
-  const dispatch = useAppDispatch();
+  const [priority, setPriority] = useState("");
+  //! for local state management
+  // const dispatch = useAppDispatch();
+  //for server
+  //[actualFuncForPost, {data, isLoading, isError........}]
+  const [addTodo, { data, isLoading, isError, isSuccess }] =
+    useAddTodoMutation();
+  console.log(data, isLoading, isError, isSuccess);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const randomStr = Math.random().toString(36).substring(2, 7);
+    // const randomStr = Math.random().toString(36).substring(2, 7);
     const taskDetails = {
-      id: randomStr,
+      // id: randomStr,
       title: task,
       desc: desc,
+      isComplete: false,
+      priority,
     };
-    dispatch(addTodo(taskDetails));
+    //! for local state management
+    // dispatch(addTodo(taskDetails));
+    //for server
+    addTodo(taskDetails);
   };
 
   return (
@@ -67,6 +87,21 @@ const AddTodoModal = () => {
                 placeholder="desc here..."
                 className="col-span-3"
               />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Priority
+              </Label>
+              <Select onValueChange={(value) => setPriority(value)}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="add your priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <DialogFooter>
