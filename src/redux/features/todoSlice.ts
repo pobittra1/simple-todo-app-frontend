@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 type TTodo = {
   id: string;
   title: string;
-  desc: string;
+  description: string;
   isComplete?: boolean;
 };
 

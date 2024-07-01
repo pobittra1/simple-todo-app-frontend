@@ -25,15 +25,15 @@ import {
 
 const AddTodoModal = () => {
   const [task, setTask] = useState("");
-  const [desc, setDesc] = useState("");
+  const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
   //! for local state management
   // const dispatch = useAppDispatch();
   //for server
   //[actualFuncForPost, {data, isLoading, isError........}]
-  const [addTodo, { data, isLoading, isError, isSuccess }] =
-    useAddTodoMutation();
-  console.log(data, isLoading, isError, isSuccess);
+  // const [addTodo, { data, isLoading, isError, isSuccess }] =
+  //   useAddTodoMutation(); // we can get also this objects data from second array index as object
+  const [addTodo] = useAddTodoMutation();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -41,7 +41,7 @@ const AddTodoModal = () => {
     const taskDetails = {
       // id: randomStr,
       title: task,
-      desc: desc,
+      description: description,
       isComplete: false,
       priority,
     };
@@ -82,7 +82,7 @@ const AddTodoModal = () => {
                 Description
               </Label>
               <Input
-                onBlur={(e) => setDesc(e.target.value)}
+                onBlur={(e) => setDescription(e.target.value)}
                 id="description"
                 placeholder="desc here..."
                 className="col-span-3"

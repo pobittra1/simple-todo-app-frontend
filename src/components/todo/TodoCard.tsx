@@ -1,25 +1,42 @@
-import { useAppDispatch } from "@/redux/hook";
+// import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
-import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
+// import { removeTodo } from "@/redux/features/todoSlice";
+import { useUpdateTodoMutation } from "@/redux/api/api";
 
 type TTodoCardProps = {
-  id: string;
+  _id: string;
   title: string;
-  desc: string;
+  description: string;
   isComplete: boolean;
   priority: string;
 };
 
 const TodoCard = ({
   title,
-  desc,
-  id,
+  description,
+  _id,
   isComplete,
   priority,
 }: TTodoCardProps) => {
-  const dispatch = useAppDispatch();
+  //for local
+  // const dispatch = useAppDispatch();
+  // const [updateTodo, { isLoading }] = useUpdateTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
   const toggleState = () => {
-    dispatch(toggleComplete(id));
+    const taskData = {
+      title,
+      description,
+      priority,
+      isComplete: !isComplete,
+    };
+    const options = {
+      id: _id,
+      data: taskData,
+    };
+    //for local
+    // dispatch(toggleComplete(id));
+    //for server
+    updateTodo(options);
   };
   return (
     <div>
@@ -30,6 +47,7 @@ const TodoCard = ({
           type="checkbox"
           name="complete"
           id="complete"
+          defaultChecked={isComplete}
         />
         <p className="font-semibold">{title}</p>
         {/* <p>time</p> */}
@@ -46,7 +64,7 @@ const TodoCard = ({
           ></div>
           <p className="">{priority}</p>
         </div>
-        <p className="flex-[2]">{desc}</p>
+        <p className="flex-[2]">{description}</p>
         {isComplete ? (
           <p className="bg-green-500 px-3 py-2  text-white rounded">Done</p>
         ) : (
@@ -71,7 +89,7 @@ const TodoCard = ({
             </svg>
           </Button>
           <Button
-            onClick={() => dispatch(removeTodo(id))}
+            // onClick={() => dispatch(removeTodo(id))}
             className="bg-red-500 text-white hover:bg-black hover:text-white   font-semibold"
           >
             <svg
